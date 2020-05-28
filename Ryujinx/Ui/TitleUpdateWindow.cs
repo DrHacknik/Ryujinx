@@ -127,7 +127,24 @@ namespace Ryujinx.Ui
                         }
                         else
                         {
-                            GtkDialog.CreateErrorDialog("The specified file does not contain an update for the selected title!");
+                            Logger.PrintError(LogClass.Application, $"{exception.Message}. Errored File: {path}");
+
+                            if (showErrorDialog)
+                            {
+                                GtkDialog.CreateInfoDialog("Ryujinx - Error", "Add Update Failed!", "The NCA header content type check has failed. This is usually because the header key is incorrect or missing.");
+                            }
+                            
+                            break;
+                        }
+                        catch (MissingKeyException exception)
+                        {
+                            Logger.PrintError(LogClass.Application, $"Your key set is missing a key with the name: {exception.Name}. Errored File: {path}");
+
+                            if (showErrorDialog)
+                            {
+                                GtkDialog.CreateInfoDialog("Ryujinx - Error", "Add Update Failed!", $"Your key set is missing a key with the name: {exception.Name}");
+                            }
+
                             break;
                         }
                     }
